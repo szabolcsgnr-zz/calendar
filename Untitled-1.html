@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Calendar</title>
+
+<style>
+* { margin: 0; padding: 0;}
+
+body, html { height:100%; }
+
+#evCanvas {
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+#popUpBox {
+    position:relative;
+    width:0px;
+    height:0px;
+	top:0px;
+	left:0px;
+
+	
+}
+#menu {
+    position:absolute;
+    width:100%;
+    height:60px;
+	bottom:0px;
+
+	background:#6FF;
+}
+</style>
+</head>
+
+<body onload="init()">
+<div id="popUpBox">
+
+<style>
+.popUpBoxy{
+	position:absolute;
+    width:300px;
+    height:300px;
+	top:300px;
+	left:300px;
+	background:rgba(204,204,204,1)
+	}
+
+
+</style>
+<div class="popUpBoxy">
+
+</div>
+
+</div>
+<div id="menu"></div>
+
+<canvas id="evCanvas" onclick="popUp()">
+
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+
+<script>
+var c=document.getElementById("evCanvas");
+var ctx=c.getContext("2d");
+var eventNames=new Array();
+var eventDates=new Array();
+
+eventDates[0]= new Date("October 13, 1975 11:13:00");
+eventDates[1]= new Date("October 13, 2013 11:13:00");
+eventDates[2]= new Date("January 13, 2013 11:13:00");
+eventDates[3]= new Date("January 13, 2014 11:13:00");
+eventDates[4]= new Date("January 14, 2014 11:13:00");
+eventDates[5]= new Date("January 15, 2014 11:13:00");
+eventDates[6]= new Date("January 15, 2014 13:13:00");
+
+
+var coordinatesX=new Array();
+var coordinatesY=new Array();
+var coordinatesZ=new Array();
+var txtSize=new Array();
+var mousePos;
+
+var inFocusName;
+var prevZ;
+
+function init() {
+ 	ctx.canvas.width  = window.innerWidth;
+  	ctx.canvas.height = window.innerHeight;
+	initEvents();
+}
+
+function initEvents(){
+	for(i=0; i<7; i++){
+		eventNames[i]="eventName"+i;	
+	}
+	calculatePositions(eventNames);
+}
+	
+function calculatePositions(eventNames){
+		for(i=0; i<eventNames.length;i++){
+			eventNames[i];
+			
+			var x; 
+			var y;
+		
+			x=Math.floor((Math.random()* window.innerWidth/1.5)+100);
+			y=Math.floor((Math.random()* window.innerHeight/1.5)+100);
+			coordinatesX[i]=x;
+			coordinatesY[i]=y;
+			coordinatesZ[i]=i+1;
+			}
+		redraw();	
+}
+	
+	
+function redraw(){
+	ctx.clearRect ( 0 , 0 ,  window.innerWidth,  window.innerHeight);
+		for(i=0; i<eventNames.length;i++){
+			ctx.font=70/coordinatesZ[i]+"px Arial";
+			ctx.fillText(eventNames[i],coordinatesX[i],coordinatesY[i]);
+			var metrics = ctx.measureText(eventNames[i]);
+    	var txtwidth = metrics.width;
+		txtSize[i]=txtwidth;
+			
+			ctx.font=30/coordinatesZ[i]+"px Arial";
+			ctx.fillText(eventDates[i].toUTCString(),coordinatesX[i],coordinatesY[i]+30/coordinatesZ[i]);
+			
+		
+		
+			
+		}
+}
+
+
+function getMousePos(c, evt) {
+        var rect = c.getBoundingClientRect();
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+      }
+
+c.addEventListener('mousemove', function(evt) {
+        mousePos = getMousePos(c, evt);
+		eventsFocus();
+      
+      }, false);
+
+function eventsFocus(){
+	//calculatePositions(eventNames);
+	outFocus();
+	var valami;
+	for(i=0;i<eventNames.length;i++){
+
+	
+	
+		if(mousePos.x>coordinatesX[i]){
+			if(mousePos.x<coordinatesX[i]+txtSize[i]){
+				if( mousePos.y>coordinatesY[i]-70/coordinatesZ[i]){
+					if( mousePos.y<coordinatesY[i]){
+						//document.getElementById("menu").innerHTML=eventNames[i];
+						inFocus(eventNames[i]);
+						break;
+					}
+				}
+		}
+	}
+	
+	}
+
+	
+	
+}
+function inFocus(name){
+	inFocusName=name;
+	var index=eventNames.indexOf(name);
+	prevZ=coordinatesZ[index];
+	coordinatesZ[index]=1;
+	redraw();
+	
+	}
+function outFocus(){
+	
+	var index=eventNames.indexOf(inFocusName);
+	coordinatesZ[index]=prevZ;
+	redraw();
+	
+	}
+function popUp(){
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("problemReport").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","textcontents/hibajelentes.txt",true);
+xmlhttp.send();
+
+	}
+</script>
+
+
+
+
+</body>
+</html>
