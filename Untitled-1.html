@@ -23,38 +23,39 @@ body, html { height:100%; }
 
 	
 }
-#menu {
+.menu {
     position:absolute;
-    width:100%;
+    width:100px;
     height:60px;
 	bottom:0px;
-
+	z-index:2;
 	background:#6FF;
+	
+	
+transition-property:width;
+transition-duration:1s;
+transition-timing-function:linear;
+
+/* Safari */
+-webkit-transition-property:width;
+-webkit-transition-duration:1s;
+-webkit-transition-timing-function:linear;
 }
+.menu:hover{
+	width:500px;
+	
+	}
 </style>
 </head>
 
 <body onload="init()">
 <div id="popUpBox">
 
-<style>
-.popUpBoxy{
-	position:absolute;
-    width:300px;
-    height:300px;
-	top:300px;
-	left:300px;
-	background:rgba(204,204,204,1)
-	}
-
-
-</style>
-<div class="popUpBoxy">
 
 </div>
-
+<div class="menu">
+<a href="#" onclick="newEvent()">Új esemény létrehozása</a>
 </div>
-<div id="menu"></div>
 
 <canvas id="evCanvas" onclick="popUp()">
 
@@ -68,13 +69,13 @@ var ctx=c.getContext("2d");
 var eventNames=new Array();
 var eventDates=new Array();
 
-eventDates[0]= new Date("October 13, 1975 11:13:00");
-eventDates[1]= new Date("October 13, 2013 11:13:00");
-eventDates[2]= new Date("January 13, 2013 11:13:00");
-eventDates[3]= new Date("January 13, 2014 11:13:00");
-eventDates[4]= new Date("January 14, 2014 11:13:00");
-eventDates[5]= new Date("January 15, 2014 11:13:00");
-eventDates[6]= new Date("January 15, 2014 13:13:00");
+eventDates[0]= "ma 2 kor";
+eventDates[1]= "ma 3 kor";
+eventDates[2]= "holnap reggel 8-kor";
+eventDates[3]= "holnap reggel 10-kor";
+eventDates[4]= "holnap";
+eventDates[5]= "holnap után";
+eventDates[6]= "január 27.";
 
 
 var coordinatesX=new Array();
@@ -105,12 +106,25 @@ function calculatePositions(eventNames){
 			
 			var x; 
 			var y;
+
 		
-			x=Math.floor((Math.random()* window.innerWidth/1.5)+100);
-			y=Math.floor((Math.random()* window.innerHeight/1.5)+100);
+				x=Math.floor((Math.random()* window.innerWidth/1.5)+100);
+				y=Math.floor((Math.random()* window.innerHeight/1.5)+100);
+				for(elozo=0; elozo<i;elozo++){
+					if(Math.abs(x-coordinatesX[elozo])<300){
+						if(Math.abs(y-coordinatesY[elozo])<50){
+							calculatePositions(eventNames);
+							return;
+							}
+						
+						}}
+			
+			
+			
 			coordinatesX[i]=x;
 			coordinatesY[i]=y;
 			coordinatesZ[i]=i+1;
+			
 			}
 		redraw();	
 }
@@ -119,14 +133,16 @@ function calculatePositions(eventNames){
 function redraw(){
 	ctx.clearRect ( 0 , 0 ,  window.innerWidth,  window.innerHeight);
 		for(i=0; i<eventNames.length;i++){
-			ctx.font=70/coordinatesZ[i]+"px Arial";
+			var meret=70-9*coordinatesZ[i];
+			if(meret<10){meret=10;}
+			ctx.font=meret+"px Arial";
 			ctx.fillText(eventNames[i],coordinatesX[i],coordinatesY[i]);
 			var metrics = ctx.measureText(eventNames[i]);
     	var txtwidth = metrics.width;
 		txtSize[i]=txtwidth;
 			
 			ctx.font=30/coordinatesZ[i]+"px Arial";
-			ctx.fillText(eventDates[i].toUTCString(),coordinatesX[i],coordinatesY[i]+30/coordinatesZ[i]);
+			ctx.fillText(eventDates[i],coordinatesX[i],coordinatesY[i]+30/coordinatesZ[i]);
 			
 		
 		
@@ -190,25 +206,37 @@ function outFocus(){
 	
 	}
 function popUp(){
-var xmlhttp;
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("problemReport").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","textcontents/hibajelentes.txt",true);
-xmlhttp.send();
+	document.getElementById("popUpBox").innerHTML="";
+	var valami;
+	for(i=0;i<eventNames.length;i++){
 
+	
+	
+		if(mousePos.x>coordinatesX[i]){
+			if(mousePos.x<coordinatesX[i]+txtSize[i]){
+				if( mousePos.y>coordinatesY[i]-70/coordinatesZ[i]){
+					if( mousePos.y<coordinatesY[i]){
+						var xx;
+						var yy;
+						if (mousePos.x> window.innerWidth/2){xx=mousePos.x-300}else{xx=mousePos.x}
+						if (mousePos.y> window.innerHeight/2){yy=mousePos.y-300}else{yy=mousePos.y}
+						
+						document.getElementById("popUpBox").innerHTML="<style> #popUpBoxy{ 	position:absolute; top:"+yy+"px; left:"+xx+"px;"+
+    "width:300px;height:300px;background:rgba(204,204,204,1);	}"+
+	"</style><div id=\"popUpBoxy\"></div>";
+						break;
+					}
+				}
+		}
+	}
+	
+	}
+}
+
+function newEvent(){
+	eventNames.unshift("Ez egy új event");
+	eventDates.unshift("holnap délben");
+	calculatePositions(eventNames);
 	}
 </script>
 
