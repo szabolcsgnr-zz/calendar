@@ -25,11 +25,13 @@ body, html { height:100%; }
 }
 .menu {
     position:absolute;
-    width:100px;
+    width:180px;
     height:60px;
-	bottom:0px;
+	bottom:20px;
+	left:30%;
 	z-index:2;
-	background:#6FF;
+
+	
 	
 	
 transition-property:width;
@@ -45,6 +47,29 @@ transition-timing-function:linear;
 	width:500px;
 	
 	}
+#prefIcon{
+
+	
+	
+	-webkit-transition-duration: 2s;
+    -moz-transition-duration: 2s;
+    -o-transition-duration: 2s;
+    transition-duration: 2s;
+     
+    -webkit-transition-property: -webkit-transform;
+    -moz-transition-property: -moz-transform;
+    -o-transition-property: -o-transform;
+    transition-property: transform;
+     
+    overflow:hidden;
+
+	}
+#prefIcon:hover{
+	-webkit-transform:rotate(720deg);
+    -moz-transform:rotate(720deg);
+    -o-transform:rotate(720deg);
+	
+	}
 </style>
 </head>
 
@@ -54,7 +79,9 @@ transition-timing-function:linear;
 
 </div>
 <div class="menu">
-<a href="#" onclick="newEvent()">Új esemény létrehozása</a>
+
+<img src="imgcontents/preficoncircle.png" id="prefIcon" onclick="prefBox()" width="60px" height="60px"  >
+
 </div>
 
 <canvas id="evCanvas" onclick="popUp()">
@@ -68,6 +95,11 @@ var c=document.getElementById("evCanvas");
 var ctx=c.getContext("2d");
 var eventNames=new Array();
 var eventDates=new Array();
+
+var xmlhttp;
+
+var eltolasX=0;
+var eltolasXseb=-1;
 
 eventDates[0]= "ma 2 kor";
 eventDates[1]= "ma 3 kor";
@@ -86,7 +118,7 @@ var mousePos;
 
 var inFocusName;
 var prevZ;
-
+var prefOpen=0;
 function init() {
  	ctx.canvas.width  = window.innerWidth;
   	ctx.canvas.height = window.innerHeight;
@@ -128,21 +160,44 @@ function calculatePositions(eventNames){
 			}
 		redraw();	
 }
-	
+window.setInterval("eltolasSzamitas()",70);
+function eltolasSzamitas(){
+		
+		if (eltolasX>100){
+			eltolasXseb=-1;
+			}
+		if (eltolasX<-100){
+			eltolasXseb=+1;
+			}
+			eltolasX+=eltolasXseb;
+			redraw();
+	}
 	
 function redraw(){
+	
 	ctx.clearRect ( 0 , 0 ,  window.innerWidth,  window.innerHeight);
 		for(i=0; i<eventNames.length;i++){
 			var meret=70-9*coordinatesZ[i];
 			if(meret<10){meret=10;}
 			ctx.font=meret+"px Arial";
-			ctx.fillText(eventNames[i],coordinatesX[i],coordinatesY[i]);
+			var r=0,g,b=194;
+			g=Math.floor(50*coordinatesZ[i]);
+			if(g>190){
+				g=190;
+				b-=Math.floor(10*coordinatesZ[i]);
+				if(b<0){
+					b=0;
+					r+=Math.floor(10*coordinatesZ[i]);
+					}
+				}
+			ctx.fillStyle = "rgb("+r+", "+g+", "+b+")";
+			ctx.fillText(eventNames[i],coordinatesX[i]+eltolasX,coordinatesY[i]);
 			var metrics = ctx.measureText(eventNames[i]);
     	var txtwidth = metrics.width;
 		txtSize[i]=txtwidth;
 			
 			ctx.font=30/coordinatesZ[i]+"px Arial";
-			ctx.fillText(eventDates[i],coordinatesX[i],coordinatesY[i]+30/coordinatesZ[i]);
+			ctx.fillText(eventDates[i],coordinatesX[i]+eltolasX,coordinatesY[i]+30/coordinatesZ[i]);
 			
 		
 		
@@ -152,6 +207,7 @@ function redraw(){
 
 
 function getMousePos(c, evt) {
+	
         var rect = c.getBoundingClientRect();
         return {
           x: evt.clientX - rect.left,
@@ -166,15 +222,15 @@ c.addEventListener('mousemove', function(evt) {
       }, false);
 
 function eventsFocus(){
-	//calculatePositions(eventNames);
+
 	outFocus();
 	var valami;
 	for(i=0;i<eventNames.length;i++){
 
 	
 	
-		if(mousePos.x>coordinatesX[i]){
-			if(mousePos.x<coordinatesX[i]+txtSize[i]){
+		if(mousePos.x>coordinatesX[i]+eltolasX){
+			if(mousePos.x<coordinatesX[i]+txtSize[i]+eltolasX){
 				if( mousePos.y>coordinatesY[i]-70/coordinatesZ[i]){
 					if( mousePos.y<coordinatesY[i]){
 						//document.getElementById("menu").innerHTML=eventNames[i];
@@ -205,25 +261,33 @@ function outFocus(){
 	redraw();
 	
 	}
+	 var eltolasXsebtemp;
 function popUp(){
+	if (eltolasXseb!=0){
+	eltolasXsebtemp=eltolasXseb;
+	}else{
+		eltolasXseb=eltolasXsebtemp;
+		}
+	
 	document.getElementById("popUpBox").innerHTML="";
 	var valami;
 	for(i=0;i<eventNames.length;i++){
 
 	
 	
-		if(mousePos.x>coordinatesX[i]){
-			if(mousePos.x<coordinatesX[i]+txtSize[i]){
+		if(mousePos.x>coordinatesX[i]+eltolasX){
+			if(mousePos.x<coordinatesX[i]+txtSize[i]+eltolasX){
 				if( mousePos.y>coordinatesY[i]-70/coordinatesZ[i]){
 					if( mousePos.y<coordinatesY[i]){
 						var xx;
 						var yy;
 						if (mousePos.x> window.innerWidth/2){xx=mousePos.x-300}else{xx=mousePos.x}
 						if (mousePos.y> window.innerHeight/2){yy=mousePos.y-300}else{yy=mousePos.y}
-						
-						document.getElementById("popUpBox").innerHTML="<style> #popUpBoxy{ 	position:absolute; top:"+yy+"px; left:"+xx+"px;"+
-    "width:300px;height:300px;background:rgba(204,204,204,1);	}"+
-	"</style><div id=\"popUpBoxy\"></div>";
+						eltolasXseb=0;
+						document.getElementById("popUpBox").innerHTML="<style> #popUpBoxy{ 	position:absolute; top:"+yy+"px; left:"+
+							xx+"px; width:300px;height:300px;	z-index:5;}"+
+							"</style><div id=\"popUpBoxy\"></div>";
+						initPopUp();
 						break;
 					}
 				}
@@ -232,11 +296,86 @@ function popUp(){
 	
 	}
 }
+function initPopUp(){
+	document.getElementById("popUpBoxy").innerHTML="";
 
+	xmlhttp=null;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("popUpBoxy").innerHTML=xmlhttp.responseText;
+	document.getElementById("meetingName").innerHTML=inFocusName;
+	document.getElementById("eventDateDisplay").innerHTML=eventDates[eventNames.indexOf(inFocusName)];
+	
+    }
+  }
+xmlhttp.open("GET","textcontents/popup.txt",true);
+xmlhttp.send();
+}
+	
+	
 function newEvent(){
 	eventNames.unshift("Ez egy új event");
 	eventDates.unshift("holnap délben");
 	calculatePositions(eventNames);
+	}
+function prefBox(){
+	
+	if (prefOpen==1){
+		document.getElementById("popUpBox").innerHTML="";
+		prefOpen=0;
+		return;
+		}
+	prefOpen=1;
+	document.getElementById("popUpBox").innerHTML="";
+	
+						var yy;
+						yy=mousePos.y-100;
+						
+						document.getElementById("popUpBox").innerHTML="<style> #popUpBoxy{ 	position:absolute; top:"+yy+"px; left:"+
+							(mousePos.x-50)+"px; width:100px;height:100px;	z-index:5;}"+
+							"</style><div id=\"popUpBoxy\"></div>";
+	
+	xmlhttp=null;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("popUpBoxy").innerHTML=xmlhttp.responseText;
+	
+	if (eltolasXseb!=0){
+		document.getElementById("animation").checked=true;
+		}
+    }
+  }
+xmlhttp.open("GET","textcontents/prefbox.txt",true);
+xmlhttp.send();
+	
+	}
+function animvalt(){
+	
+	if(document.getElementById("animation").checked==true){
+	eltolasXseb=1;
+	}else{
+			eltolasXseb=0;
+		}
 	}
 </script>
 

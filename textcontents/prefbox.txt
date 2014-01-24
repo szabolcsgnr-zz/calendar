@@ -1,0 +1,6 @@
+
+
+<style>
+
+</style>
+<input type="checkbox" id="animation" onchange="animvalt()" > Animációk<br>
