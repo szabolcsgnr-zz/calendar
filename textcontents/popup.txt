@@ -9,6 +9,11 @@ tr.popUp{
 border: 0px;
 }
 td.popUp{
+font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #6b6b6b;
 border: 0px;
 text-align:center;
 }
@@ -18,7 +23,14 @@ text-align:center;
 	margin-left:15px;
 	margin-top:15px;
 	}
-
+#meetingName{
+	 font-family: Arial, Helvetica, sans-serif;
+	font-size: 22px;
+	font-style: italic;
+	font-weight: bold;
+	color: #333e5f;
+	text-align: center;
+	}
 </style>
 
 <table width="300px" height="300px" border="1" id="popuptable">
@@ -28,16 +40,16 @@ text-align:center;
     <td class="popUp"><h2 id="meetingName">cannotLoadMeetin...</h2><p id="eventDateDisplay"> eventDate</p></td>
   </tr>
   <tr class="popUp">
-    <td class="popUp" colspan="2">Kivel?</td>
+    <td class="popUp" colspan="2" height="25">vele: Sántha Szabolcs</td>
     
     
   </tr>
   <tr class="popUp">
-    <td class="popUp" colspan="2">hol?</td>
+    <td class="popUp" colspan="2" height="25">helyszín: mignon kávézó</td>
   
   </tr>
   <tr class="popUp">
-    <td class="popUp"  colspan="2">Valami hosszabb leírás a találkozó definiálására akár több sorban</td>
+    <td class="popUp"  colspan="2" style="color: black;font-weight:normal;">Valami hosszabb leírás a találkozó definiálására akár több sorban</td>
     
   </tr>
 

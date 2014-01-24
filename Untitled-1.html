@@ -13,6 +13,7 @@ body, html { height:100%; }
     position:absolute;
     width:100%;
     height:100%;
+
 }
 #popUpBox {
     position:relative;
@@ -30,31 +31,17 @@ body, html { height:100%; }
 	bottom:20px;
 	left:30%;
 	z-index:2;
+	//background:rgba(255,255,204,1);
 
-	
-	
-	
-transition-property:width;
-transition-duration:1s;
-transition-timing-function:linear;
-
-/* Safari */
--webkit-transition-property:width;
--webkit-transition-duration:1s;
--webkit-transition-timing-function:linear;
 }
-.menu:hover{
-	width:500px;
-	
-	}
 #prefIcon{
 
 	
 	
-	-webkit-transition-duration: 2s;
-    -moz-transition-duration: 2s;
-    -o-transition-duration: 2s;
-    transition-duration: 2s;
+	-webkit-transition-duration: 1s;
+    -moz-transition-duration: 1s;
+    -o-transition-duration: 1s;
+    transition-duration: 1s;
      
     -webkit-transition-property: -webkit-transform;
     -moz-transition-property: -moz-transform;
@@ -65,9 +52,19 @@ transition-timing-function:linear;
 
 	}
 #prefIcon:hover{
-	-webkit-transform:rotate(720deg);
-    -moz-transform:rotate(720deg);
-    -o-transform:rotate(720deg);
+	-webkit-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+	
+	}
+	
+#menuHelp{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: italic;
+	font-weight: normal;
+	color: rgba(204,204,204,1);
+	text-align: center;
 	
 	}
 </style>
@@ -79,9 +76,25 @@ transition-timing-function:linear;
 
 </div>
 <div class="menu">
+<table onmouseout="delSugoText()">
+<tr>
+	<td width="40px">
+<img src="imgcontents/preficoncircle.png" title="Beállítások" id="prefIcon" onclick="prefBox()" onmouseover="prefSugo()" width="40px" height="40px"  >
+	</td>
+    <td width="40px">
+<img src="imgcontents/envelope.png" title="Üzenetek" id="envelopeIcon" onclick="" onmouseover="envSugo()" width="40px" height="40px"  >
+	</td>
+    <td width="90px">
+    
+    </td>
+</tr>
 
-<img src="imgcontents/preficoncircle.png" id="prefIcon" onclick="prefBox()" width="60px" height="60px"  >
+<tr>
+	<td id="menuHelp" colspan="2" width="178px">
 
+	</td>
+</tr>
+</table>
 </div>
 
 <canvas id="evCanvas" onclick="popUp()">
@@ -100,6 +113,7 @@ var xmlhttp;
 
 var eltolasX=0;
 var eltolasXseb=-1;
+var animationOn=1;
 
 eventDates[0]= "ma 2 kor";
 eventDates[1]= "ma 3 kor";
@@ -108,7 +122,10 @@ eventDates[3]= "holnap reggel 10-kor";
 eventDates[4]= "holnap";
 eventDates[5]= "holnap után";
 eventDates[6]= "január 27.";
-
+eventDates[7]= "holnap reggel 10-kor";
+eventDates[8]= "holnap";
+eventDates[9]= "holnap után";
+eventDates[10]= "január 27.";
 
 var coordinatesX=new Array();
 var coordinatesY=new Array();
@@ -126,7 +143,7 @@ function init() {
 }
 
 function initEvents(){
-	for(i=0; i<7; i++){
+	for(i=0; i<8; i++){
 		eventNames[i]="eventName"+i;	
 	}
 	calculatePositions(eventNames);
@@ -159,8 +176,12 @@ function calculatePositions(eventNames){
 			
 			}
 		redraw();	
+			
+		
 }
+
 window.setInterval("eltolasSzamitas()",70);
+
 function eltolasSzamitas(){
 		
 		if (eltolasX>100){
@@ -170,9 +191,10 @@ function eltolasSzamitas(){
 			eltolasXseb=+1;
 			}
 			eltolasX+=eltolasXseb;
+			
 			redraw();
+			
 	}
-	
 function redraw(){
 	
 	ctx.clearRect ( 0 , 0 ,  window.innerWidth,  window.innerHeight);
@@ -199,10 +221,8 @@ function redraw(){
 			ctx.font=30/coordinatesZ[i]+"px Arial";
 			ctx.fillText(eventDates[i],coordinatesX[i]+eltolasX,coordinatesY[i]+30/coordinatesZ[i]);
 			
-		
-		
-			
 		}
+	
 }
 
 
@@ -250,7 +270,10 @@ function inFocus(name){
 	inFocusName=name;
 	var index=eventNames.indexOf(name);
 	prevZ=coordinatesZ[index];
-	coordinatesZ[index]=1;
+	
+	if(coordinatesZ[index]!=1){
+		coordinatesZ[index]--;
+		}
 	redraw();
 	
 	}
@@ -265,7 +288,7 @@ function outFocus(){
 function popUp(){
 	if (eltolasXseb!=0){
 	eltolasXsebtemp=eltolasXseb;
-	}else{
+	}else if(animationOn==1){
 		eltolasXseb=eltolasXsebtemp;
 		}
 	
@@ -338,11 +361,11 @@ function prefBox(){
 	prefOpen=1;
 	document.getElementById("popUpBox").innerHTML="";
 	
-						var yy;
-						yy=mousePos.y-100;
 						
-						document.getElementById("popUpBox").innerHTML="<style> #popUpBoxy{ 	position:absolute; top:"+yy+"px; left:"+
-							(mousePos.x-50)+"px; width:100px;height:100px;	z-index:5;}"+
+						var yy=window.innerHeight-200;
+						var xx=window.innerWidth*0.3;
+						document.getElementById("popUpBox").innerHTML="<style> #popUpBoxy{ 	background:white; position:absolute; top:"+yy+"px; left:"+
+							xx+"px; width:100px;height:100px;	z-index:5;}"+
 							"</style><div id=\"popUpBoxy\"></div>";
 	
 	xmlhttp=null;
@@ -372,14 +395,94 @@ xmlhttp.send();
 function animvalt(){
 	
 	if(document.getElementById("animation").checked==true){
+	animationOn=1;
 	eltolasXseb=1;
 	}else{
+			animationOn=0;
 			eltolasXseb=0;
 		}
 	}
+	
+function prefSugo(){
+	document.getElementById("menuHelp").innerHTML="";
+	document.getElementById("menuHelp").innerHTML="Beállítások";
+	}
+function envSugo(){
+	document.getElementById("menuHelp").innerHTML="";
+	document.getElementById("menuHelp").innerHTML="Üzenetek";
+	}
+function delSugoText(){
+	document.getElementById("menuHelp").innerHTML="";
+	}
 </script>
 
+<script>
+var prefPaneltmp;
+var colorChangePanelon=0;
+function changeBackground(){
 
+		
+		
+    
+	if(colorChangePanelon==0){
+	colorChangePanelon=1;
+	document.getElementById("popUpBoxy").style.width="200px";
+	 prefPaneltmp=document.getElementById("popUpBoxy").innerHTML;
+	}else{
+		document.getElementById("popUpBoxy").innerHTML=prefPaneltmp;
+		document.getElementById("popUpBoxy").style.width="100px";
+		colorChangePanelon=0;
+		return;
+		}
+	xmlhttp=null;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+	document.getElementById("popUpBoxy").innerHTML="<table><tr><td style=\" vertical-align:text-top;\">"+
+	prefPaneltmp+"</td><td>"+xmlhttp.responseText+"</td></tr></table>";
+    }
+  }
+xmlhttp.open("GET","textcontents/backgrdchange.txt",true);
+xmlhttp.send();
+	
+	}
+	
+function changeBackgroundToColor(color){
+	switch(color){
+		case 0:
+		document.getElementById("evCanvas").style.background="";
+	document.getElementById("evCanvas").style.background="black";
+	break;
+	case 1:
+	document.getElementById("evCanvas").style.background="";
+	document.getElementById("evCanvas").style.background="grey";
+	break;
+	case 2:
+	document.getElementById("evCanvas").style.background="";
+	document.getElementById("evCanvas").style.background="azure";
+	break;
+	case 3:
+	document.getElementById("evCanvas").style.background="";
+	document.getElementById("evCanvas").style.background="white";
+	break;
+	case 4:
+	document.getElementById("evCanvas").style.background="";
+	document.getElementById("evCanvas").style.background="red";
+	break;
+	}
+}
+
+
+</script>
 
 
 </body>

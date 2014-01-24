@@ -1,0 +1,27 @@
+
+
+<table  height="100px">
+<tr>
+	<td width="20" height="20" style="background:black" onclick="changeBackgroundToColor(0)">
+
+	</td>
+    <td width="20" style="background:grey" onclick="changeBackgroundToColor(1)">
+
+	</td>
+    <td width="20" style="background:azure" onclick="changeBackgroundToColor(2)">
+
+	</td>
+    <td width="20" style="background:white" onclick="changeBackgroundToColor(3)">
+
+	</td>
+    <td width="20" style="background:red" onclick="changeBackgroundToColor(4)">
+
+	</td>
+</tr>
+
+<tr>
+	<td colspan="5">
+fájl feltöltése
+	</td>
+</tr>
+</table>

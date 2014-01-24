@@ -1,6 +1,35 @@
 
 
 <style>
-
+.menuNodesStyle{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: bold;
+	color: rgba(204,204,204,1);
+	text-align: left;
+	text-decoration: none;
+}
 </style>
-<input type="checkbox" id="animation" onchange="animvalt()" > Animációk<br>
+<table>
+<tr>
+<td>
+<a href="#" onclick="calculatePositions(eventNames)" class="menuNodesStyle">Újrarendezés</a>
+</td>
+</tr>
+<tr>
+<td class="menuNodesStyle">
+Animációk <input type="checkbox" id="animation" onchange="animvalt()" > 
+</td>
+</tr>
+<tr>
+<td>
+<a href="#" class="menuNodesStyle">Emlékeztetők</a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="#" class="menuNodesStyle" onclick="changeBackground()">Háttér</a>
+</td>
+</tr>
+</table>
