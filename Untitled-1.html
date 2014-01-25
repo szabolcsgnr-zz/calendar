@@ -26,7 +26,7 @@ body, html { height:100%; }
 }
 .menu {
     position:absolute;
-    width:180px;
+    width:120px;
     height:60px;
 	bottom:20px;
 	left:30%;
@@ -67,6 +67,17 @@ body, html { height:100%; }
 	text-align: center;
 	
 	}
+	
+#userName{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-style: italic;
+	font-weight: bold;
+	color: rgba(0,51,153,1);
+	text-align: left;
+	text-decoration: none;
+	
+	}
 </style>
 </head>
 
@@ -78,26 +89,28 @@ body, html { height:100%; }
 <div class="menu">
 <table onmouseout="delSugoText()">
 <tr>
-	<td width="40px">
-<img src="imgcontents/preficoncircle.png" title="Beállítások" id="prefIcon" onclick="prefBox()" onmouseover="prefSugo()" width="40px" height="40px"  >
+	<td width="40px" onclick="prefBox()" onmouseover="prefSugo()">
+<img src="imgcontents/preficoncircle.png" title="Beállítások" id="prefIcon"  width="40px" height="40px"  >
 	</td>
-    <td width="40px">
-<img src="imgcontents/envelope.png" title="Üzenetek" id="envelopeIcon" onclick="" onmouseover="envSugo()" width="40px" height="40px"  >
+    <td width="40px" onclick="" onmouseover="envSugo()">
+<img src="imgcontents/envelope.png" title="Üzenetek" id="envelopeIcon"  width="40px" height="40px"  >
 	</td>
-    <td width="90px">
-    
+    <td  width="40px"  onmouseover="profSugo()">
+    <img src="imgcontents/proficon.png" title="Profil" id="profilIcon"  width="40px" height="40px"  >
+   
     </td>
+  
 </tr>
 
 <tr>
-	<td id="menuHelp" colspan="2" width="178px">
+	<td id="menuHelp" colspan="3" width="100%">
 
 	</td>
 </tr>
 </table>
 </div>
 
-<canvas id="evCanvas" onclick="popUp()">
+<canvas id="evCanvas" onclick="popUp()" onmousedown="dragEventsScroll()" onmouseup="dragEventsScrollend()">
 
 Your browser does not support the HTML5 canvas tag.
 </canvas>
@@ -198,6 +211,7 @@ function eltolasSzamitas(){
 function redraw(){
 	
 	ctx.clearRect ( 0 , 0 ,  window.innerWidth,  window.innerHeight);
+	c.width = c.width;
 		for(i=0; i<eventNames.length;i++){
 			var meret=70-9*coordinatesZ[i];
 			if(meret<10){meret=10;}
@@ -411,6 +425,10 @@ function envSugo(){
 	document.getElementById("menuHelp").innerHTML="";
 	document.getElementById("menuHelp").innerHTML="Üzenetek";
 	}
+function profSugo(){
+	document.getElementById("menuHelp").innerHTML="";
+	document.getElementById("menuHelp").innerHTML="Profil";
+	}
 function delSugoText(){
 	document.getElementById("menuHelp").innerHTML="";
 	}
@@ -420,9 +438,6 @@ function delSugoText(){
 var prefPaneltmp;
 var colorChangePanelon=0;
 function changeBackground(){
-
-		
-		
     
 	if(colorChangePanelon==0){
 	colorChangePanelon=1;
@@ -432,6 +447,9 @@ function changeBackground(){
 		document.getElementById("popUpBoxy").innerHTML=prefPaneltmp;
 		document.getElementById("popUpBoxy").style.width="100px";
 		colorChangePanelon=0;
+		if (eltolasXseb!=0){
+		document.getElementById("animation").checked=true;
+		}
 		return;
 		}
 	xmlhttp=null;
@@ -449,6 +467,10 @@ xmlhttp.onreadystatechange=function()
     {
 	document.getElementById("popUpBoxy").innerHTML="<table><tr><td style=\" vertical-align:text-top;\">"+
 	prefPaneltmp+"</td><td>"+xmlhttp.responseText+"</td></tr></table>";
+	
+	if (eltolasXseb!=0){
+		document.getElementById("animation").checked=true;
+		}
     }
   }
 xmlhttp.open("GET","textcontents/backgrdchange.txt",true);
@@ -481,7 +503,22 @@ function changeBackgroundToColor(color){
 	}
 }
 
-
+var dragBeginX;
+function dragEventsScroll(){
+	dragBeginX=mousePos.x;
+	dragTimer=setInterval("dragReload()",70);
+	}
+	
+function dragReload(){
+		for(i=0;i<eventNames.length;i++){
+			coordinatesX[i]-=dragBeginX-mousePos.x;
+			}
+			dragBeginX=mousePos.x;
+	}
+function dragEventsScrollend(){
+	window.clearInterval(dragTimer);
+	}
+	
 </script>
 
 
