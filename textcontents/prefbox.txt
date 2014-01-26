@@ -12,6 +12,10 @@
 </style>
 
 <table width="300px" height="141" border="0px" style="text-align:center">
+<tr><td colspan="2">
+<a  class="menuNodesStyle" style="font-size:23px">Beállítások<a>
+</td></tr>
+
 <tr>
 <td height="22">
 <a href="#" onclick="calculatePositions(eventNames)" class="menuNodesStyle">Újrarendezés</a>
@@ -20,14 +24,7 @@
 Animációk <input type="checkbox" id="animation" onchange="animvalt()" > 
 </td>
 </tr>
-<tr>
 
-<td height="20">
-<a href="#" class="menuNodesStyle" height="20px">Emlékeztetők</a>
-</td>
-<td>
-</td>
-</tr>
 <tr>
 
 <td height="28"  colspan="2" align="center">
@@ -54,8 +51,17 @@ Animációk <input type="checkbox" id="animation" onchange="animvalt()" >
 	</td>
 	
 </tr>
+
 </table>
 
+</tr>
+<tr>
+
+<td height="20">
+<a href="#" class="menuNodesStyle" height="20px">Emlékeztetők</a>
+</td>
+<td>
+</td>
 </tr>
 <tr>
 <td colspan="2" height="10px"> </td>

@@ -58,29 +58,71 @@ body, html { height:100%; }
 	font-weight: normal;
 	color: rgba(204,204,204,1);
 	text-align: center;
-	
+	text-decoration: none;
 	}
 #popUpBox{ 	
 	
 	position:absolute; 
-	top:10%; 
+	bottom:80px; 
 	left:30%; 
 	width:300;
 	height:300px;	
 	z-index:5;
 }
-							
+#eventHolder{ 	
+	
+	position:absolute; 
+	top:50%;
+	margin-top:-250px; 
+	left:70%; 
+	margin-left:-150px;
+	width:300;
+	height:500px;	
+	z-index:5;
+	//background-color:grey;
+}
+.popUpBgImage{
+	position:absolute;
+	width:300px; 
+	height:5px;
+	top:0px;
+	left:0px;
+	z-index:-2;
+	
+	}
+.popUpBgImageTransiton{
+	position:absolute;
+	width:300px; 
+	height:300px;
+	top:0px;
+	left:0px;
+	z-index:-2;
+	
+	transition-property: height;
+	transition-duration: 0.5s;
+	transition-timing-function: linear;
+
+	/* Safari */
+	-webkit-transition-property:height;
+	-webkit-transition-duration:0.5s;
+	-webkit-transition-timing-function:linear;
+	
+	}					
 </style>
 </head>
 
 <body onload="init()">
 <div id="popUpBox">
+</div>
+
+<div id="eventHolder">
 
 </div>
 <div class="menu" >
-<a href="#">
+<a href="#" style="text-decoration: none;">
 <table onmouseout="delSugoText()">
 <tr>
+	<a href="#" style="text-decoration: none;">
 	<td width="40px" onclick="prefBox()" onmouseover="prefSugo()" >
 <img src="imgcontents/preficoncircle.png" title="Beállítások" id="prefIcon"  width="40px" height="40px"  >
 	</td>
@@ -91,6 +133,12 @@ body, html { height:100%; }
     <img src="imgcontents/proficon.png" title="Profil" id="profilIcon"  width="40px" height="40px"  >
    
     </td>
+    </a>
+    <td  width="200px"  >
+    <input type="text" />
+   
+    </td>
+    
   
 </tr>
 
@@ -100,7 +148,7 @@ body, html { height:100%; }
 	</td>
 </tr>
 </table>
-</a>
+
 </div>
 
 <canvas id="evCanvas" onclick="popUp()" onmousedown="dragEventsScroll()" onmouseup="dragEventsScrollend()">
@@ -110,6 +158,7 @@ Your browser does not support the HTML5 canvas tag.
 
 
 <script>
+
 var c=document.getElementById("evCanvas");
 var ctx=c.getContext("2d");
 var eventNames=new Array();
@@ -293,14 +342,17 @@ function outFocus(){
 	}
 	 var eltolasXsebtemp;
 function popUp(){
+	
 	if (eltolasXseb!=0){
+	
 	eltolasXsebtemp=eltolasXseb;
 	}else if(animationOn==1){
 		eltolasXseb=eltolasXsebtemp;
+		
 		}
 	
-	document.getElementById("popUpBox").innerHTML="";
-	var valami;
+	document.getElementById("eventHolder").innerHTML="";
+	var preffff=0;
 	for(i=0;i<eventNames.length;i++){
 
 	
@@ -314,10 +366,12 @@ function popUp(){
 						if (mousePos.x> window.innerWidth/2){xx=mousePos.x-300}else{xx=mousePos.x}
 						if (mousePos.y> window.innerHeight/2){yy=mousePos.y-300}else{yy=mousePos.y}
 						eltolasXseb=0;
-						document.getElementById("popUpBox").innerHTML="<img src=\"imgcontents/popUp.png\" "+
-						"width=\"300px\" height=\"300px\" style=\"position:absolute; top:0px;left:0px;z-index:-2;\" >"+
-						"<div id=\"popUpBoxy\"></div>";
+						document.getElementById("eventHolder").innerHTML="<img src=\"imgcontents/popUp.png\" "+
+						"class=\"popUpBgImage\" id=\"popUpBgImageid\" >"+
+						"<div id=\"popUpBoxy\" class=\"popUpBoxy\" ></div>";
+						document.getElementById('popUpBgImageid').className = "popUpBgImage";
 						initPopUp();
+						preffff=1;
 						break;
 					}
 				}
@@ -325,6 +379,11 @@ function popUp(){
 	}
 	
 	}
+	
+	if(prefOpen==1&&preffff==0){
+		document.getElementById("popUpBox").innerHTML="";
+		prefOpen=0;
+		}
 }
 function initPopUp(){
 	document.getElementById("popUpBoxy").innerHTML="";
@@ -342,10 +401,12 @@ xmlhttp.onreadystatechange=function()
   {
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
+	document.getElementById('popUpBgImageid').className = "popUpBgImageTransiton";
+	window.setTimeout(function(){
     document.getElementById("popUpBoxy").innerHTML=xmlhttp.responseText;
 	document.getElementById("meetingName").innerHTML=inFocusName;
 	document.getElementById("eventDateDisplay").innerHTML=eventDates[eventNames.indexOf(inFocusName)];
-	
+	},500);
     }
   }
 xmlhttp.open("GET","textcontents/popup.txt",true);
@@ -357,6 +418,7 @@ xmlhttp.send();
 function prefBox(){
 	
 	if (prefOpen==1){
+		
 		document.getElementById("popUpBox").innerHTML="";
 		prefOpen=0;
 		return;
@@ -364,11 +426,10 @@ function prefBox(){
 	prefOpen=1;
 	document.getElementById("popUpBox").innerHTML="";
 	
-						
-				
-						document.getElementById("popUpBox").innerHTML="<img src=\"imgcontents/popUp.png\" "+
-						"width=\"300px\" height=\"300px\" style=\"position:absolute; top:0px;left:0px;z-index:-2;\" >"+
-						"<div id=\"popUpBoxy\"></div>";
+	document.getElementById("popUpBox").innerHTML="<img src=\"imgcontents/popUp.png\" "+
+	" class=\"popUpBgImage\" id=\"popUpBgImageid0\" >"+
+	"<div class=\"popUpBoxy\" id=\"popPrefBox\"></div>";
+	document.getElementById('popUpBgImageid0').className = "popUpBgImage";
 	
 	xmlhttp=null;
 if (window.XMLHttpRequest)
@@ -383,11 +444,14 @@ xmlhttp.onreadystatechange=function()
   {
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
-    document.getElementById("popUpBoxy").innerHTML=xmlhttp.responseText;
-	
-	if (eltolasXseb!=0){
-		document.getElementById("animation").checked=true;
-		}
+	document.getElementById('popUpBgImageid0').className = "popUpBgImageTransiton";
+	window.setTimeout(function(){
+		document.getElementById("popPrefBox").innerHTML=xmlhttp.responseText;
+		if (eltolasXseb!=0){
+			document.getElementById("animation").checked=true;
+			}
+	},500);
+   
     }
   }
 xmlhttp.open("GET","textcontents/prefbox.txt",true);
@@ -423,49 +487,7 @@ function delSugoText(){
 </script>
 
 <script>
-var prefPaneltmp;
-var colorChangePanelon=0;
-function changeBackground(){
-    
-	if(colorChangePanelon==0){
-	colorChangePanelon=1;
-	document.getElementById("popUpBoxy").style.width="200px";
-	 prefPaneltmp=document.getElementById("popUpBoxy").innerHTML;
-	}else{
-		document.getElementById("popUpBoxy").innerHTML=prefPaneltmp;
-		document.getElementById("popUpBoxy").style.width="100px";
-		colorChangePanelon=0;
-		if (eltolasXseb!=0){
-		document.getElementById("animation").checked=true;
-		}
-		return;
-		}
-	xmlhttp=null;
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-	document.getElementById("popUpBoxy").innerHTML="<table><tr><td style=\" vertical-align:text-top;\">"+
-	prefPaneltmp+"</td><td>"+xmlhttp.responseText+"</td></tr></table>";
-	
-	if (eltolasXseb!=0){
-		document.getElementById("animation").checked=true;
-		}
-    }
-  }
-xmlhttp.open("GET","textcontents/backgrdchange.txt",true);
-xmlhttp.send();
-	
-	}
-	
+
 function changeBackgroundToColor(color){
 	switch(color){
 		case 0:
