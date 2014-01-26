@@ -1,4 +1,4 @@
-<img src="imgcontents/popUp.png" width="300px" height="300px" style="position:absolute; top:0px;left:0px;z-index:-2;" >
+
 
 <style>
 #popuptable{

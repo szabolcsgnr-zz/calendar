@@ -1,5 +1,4 @@
 
-
 <style>
 .menuNodesStyle{
 	font-family: Arial, Helvetica, sans-serif;
@@ -11,25 +10,55 @@
 	text-decoration: none;
 }
 </style>
-<table>
+
+<table width="300px" height="141" border="0px" style="text-align:center">
 <tr>
-<td>
+<td height="22">
 <a href="#" onclick="calculatePositions(eventNames)" class="menuNodesStyle">Újrarendezés</a>
 </td>
-</tr>
-<tr>
 <td class="menuNodesStyle">
 Animációk <input type="checkbox" id="animation" onchange="animvalt()" > 
 </td>
 </tr>
 <tr>
+
+<td height="20">
+<a href="#" class="menuNodesStyle" height="20px">Emlékeztetők</a>
+</td>
 <td>
-<a href="#" class="menuNodesStyle">Emlékeztetők</a>
 </td>
 </tr>
 <tr>
-<td>
-<a href="#" class="menuNodesStyle" onclick="changeBackground()">Háttér</a>
-</td>
+
+<td height="28"  colspan="2" align="center">
+<table align="center"  >
+<tr>
+	<td width="100px" class="menuNodesStyle">
+    Háttér
+    </td>
+    
+	<td width="19" height="20" style="background:black" onclick="changeBackgroundToColor(0)">
+	
+	</td>
+    <td width="20" style="background:grey" onclick="changeBackgroundToColor(1)">
+
+	</td>
+    <td width="20" style="background:azure" onclick="changeBackgroundToColor(2)">
+
+	</td>
+    <td width="20" style="background:white" onclick="changeBackgroundToColor(3)">
+
+	</td>
+    <td width="20" style="background:red" onclick="changeBackgroundToColor(4)">
+ 
+	</td>
+	
+</tr>
+</table>
+
+</tr>
+<tr>
+<td colspan="2" height="10px"> </td>
+
 </tr>
 </table>
