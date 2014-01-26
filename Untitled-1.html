@@ -26,6 +26,7 @@ body, html { height:100%; }
 	z-index:2;
 	//background:rgba(255,255,204,1);
 
+
 }
 #prefIcon{
 
@@ -76,11 +77,21 @@ body, html { height:100%; }
 	margin-top:-250px; 
 	left:70%; 
 	margin-left:-150px;
-	width:300;
-	height:500px;	
+
 	z-index:5;
 	//background-color:grey;
 }
+#signInDiv{ 	
+	
+	position:absolute; 
+	bottom:100px;
+
+	left:35%; 
+	
+	z-index:5;
+	
+}
+
 .popUpBgImage{
 	position:absolute;
 	width:300px; 
@@ -106,16 +117,21 @@ body, html { height:100%; }
 	-webkit-transition-property:height;
 	-webkit-transition-duration:0.5s;
 	-webkit-transition-timing-function:linear;
-	
+
 	}					
 </style>
 </head>
 
 <body onload="init()">
 <div id="popUpBox">
+
+
 </div>
 
 <div id="eventHolder">
+
+</div>
+<div id="signInDiv">
 
 </div>
 <div class="menu" >
@@ -129,15 +145,35 @@ body, html { height:100%; }
     <td width="40px" onclick="" onmouseover="envSugo()">
 <img src="imgcontents/envelope.png" title="Üzenetek" id="envelopeIcon"  width="40px" height="40px"  >
 	</td>
-    <td  width="40px"  onmouseover="profSugo()">
+    <td  width="40px"  onmouseover="profSugo()" onclick="login()">
     <img src="imgcontents/proficon.png" title="Profil" id="profilIcon"  width="40px" height="40px"  >
    
     </td>
     </a>
-    <td  width="200px"  >
-    <input type="text" />
+   <script>
    
-    </td>
+function login(){
+	xmlhttp=null;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+   	document.getElementById("signInDiv").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","textcontents/login.txt",true);
+xmlhttp.send();
+	
+	}
+   </script>
     
   
 </tr>
@@ -529,8 +565,8 @@ function dragEventsScrollend(){
 	window.clearInterval(dragTimer);
 	}
 	
+	
 </script>
-
 
 </body>
 </html>
