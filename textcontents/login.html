@@ -1,0 +1,42 @@
+
+
+<style>
+
+#singInDiv0{
+	margin-left:10px;
+	margin-top:20px;
+	width:260px; 
+	height:80px;
+}
+.popUpBgImageLogin{
+	position:absolute;
+	width:260px; 
+	height:100px;
+	top:0px;
+	left:0px;
+	z-index:-2;
+	
+	}
+
+</style>
+
+
+<img src="imgcontents/popUp.png" height="100px" width="250px" class="popUpBgImageLogin">
+<div id="singInDiv0">
+<table align="center" width="240px">
+  <form  method="post" name="login_form" id="loginform">      
+<tr><td align="right">
+		e-mail: <input type="text" id="email" width="150px" name="email"/>
+</tr></td>
+<tr><td align="right">	
+		password: <input type="password" width="150px" id="password" name="password"/>
+</tr></td>
+<tr><td align="right">	
+		<input type="button" id="signUpButton" onfocus="focusChangeToEnter()" onclick="signUp()" value="sign up"/>
+		<input type="button" id="enterButton" value="enter"  onclick="formhash( );" />
+        
+</tr></td>	
+   </form>
+</table>
+</div>
+

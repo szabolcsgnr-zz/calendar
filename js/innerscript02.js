@@ -1,204 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Calendar</title>
-
-<style>
-* { margin: 0; padding: 0;}
-
-body, html { height:100%; }
-
-#evCanvas {
-    position:absolute;
-    width:100%;
-    height:100%;
-
-}
-
-
-.menu {
-    position:absolute;
-    width:120px;
-    height:60px;
-	bottom:20px;
-	left:30%;
-	z-index:2;
-	//background:rgba(255,255,204,1);
-
-
-}
-#prefIcon{
-
-	
-	
-	-webkit-transition-duration: 1s;
-    -moz-transition-duration: 1s;
-    -o-transition-duration: 1s;
-    transition-duration: 1s;
-     
-    -webkit-transition-property: -webkit-transform;
-    -moz-transition-property: -moz-transform;
-    -o-transition-property: -o-transform;
-    transition-property: transform;
-     
-    overflow:hidden;
-
-	}
-#prefIcon:hover{
-	-webkit-transform:rotate(180deg);
-    -moz-transform:rotate(180deg);
-    -o-transform:rotate(180deg);
-	
-	}
-	
-#menuHelp{
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	font-style: italic;
-	font-weight: normal;
-	color: rgba(204,204,204,1);
-	text-align: center;
-	text-decoration: none;
-	}
-#popUpBox{ 	
-	
-	position:absolute; 
-	bottom:80px; 
-	left:30%; 
-	width:300;
-	height:300px;	
-	z-index:5;
-}
-#eventHolder{ 	
-	
-	position:absolute; 
-	top:50%;
-	margin-top:-250px; 
-	left:70%; 
-	margin-left:-150px;
-
-	z-index:5;
-	//background-color:grey;
-}
-#signInDiv{ 	
-	
-	position:absolute; 
-	bottom:100px;
-
-	left:35%; 
-	
-	z-index:5;
-	
-}
-
-.popUpBgImage{
-	position:absolute;
-	width:300px; 
-	height:5px;
-	top:0px;
-	left:0px;
-	z-index:-2;
-	
-	}
-.popUpBgImageTransiton{
-	position:absolute;
-	width:300px; 
-	height:300px;
-	top:0px;
-	left:0px;
-	z-index:-2;
-	
-	transition-property: height;
-	transition-duration: 0.5s;
-	transition-timing-function: linear;
-
-	/* Safari */
-	-webkit-transition-property:height;
-	-webkit-transition-duration:0.5s;
-	-webkit-transition-timing-function:linear;
-
-	}					
-</style>
-</head>
-
-<body onload="init()">
-<div id="popUpBox">
-
-
-</div>
-
-<div id="eventHolder">
-
-</div>
-<div id="signInDiv">
-
-</div>
-<div class="menu" >
-<a href="#" style="text-decoration: none;">
-<table onmouseout="delSugoText()">
-<tr>
-	<a href="#" style="text-decoration: none;">
-	<td width="40px" onclick="prefBox()" onmouseover="prefSugo()" >
-<img src="imgcontents/preficoncircle.png" title="Beállítások" id="prefIcon"  width="40px" height="40px"  >
-	</td>
-    <td width="40px" onclick="" onmouseover="envSugo()">
-<img src="imgcontents/envelope.png" title="Üzenetek" id="envelopeIcon"  width="40px" height="40px"  >
-	</td>
-    <td  width="40px"  onmouseover="profSugo()" onclick="login()">
-    <img src="imgcontents/proficon.png" title="Profil" id="profilIcon"  width="40px" height="40px"  >
-   
-    </td>
-    </a>
-   <script>
-   
-function login(){
-	xmlhttp=null;
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-   	document.getElementById("signInDiv").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","textcontents/login.txt",true);
-xmlhttp.send();
-	
-	}
-   </script>
-    
-  
-</tr>
-
-<tr>
-	<td id="menuHelp" colspan="3" width="100%">
-
-	</td>
-</tr>
-</table>
-
-</div>
-
-<canvas id="evCanvas" onclick="popUp()" onmousedown="dragEventsScroll()" onmouseup="dragEventsScrollend()">
-
-Your browser does not support the HTML5 canvas tag.
-</canvas>
-
-
-<script>
 
 var c=document.getElementById("evCanvas");
 var ctx=c.getContext("2d");
 var eventNames=new Array();
 var eventDates=new Array();
+var eventGuests=new Array();
+var eventLocation=new Array();
+var eventDiscription=new Array();
+var eventImage=new Array();
 
 var xmlhttp;
 
@@ -230,7 +38,16 @@ var prefOpen=0;
 function init() {
  	ctx.canvas.width  = window.innerWidth;
   	ctx.canvas.height = window.innerHeight;
-	initEvents();
+	
+	<?php 
+	if (login_check()){
+			echo 'initUserEvents(\'\');';
+		}else{
+			echo 'initEvents();';
+			
+			}
+	
+	?>
 }
 
 function initEvents(){
@@ -239,6 +56,121 @@ function initEvents(){
 	}
 	calculatePositions(eventNames);
 }
+	
+function initUserEvents(datestring){
+			 eventNames=new Array();
+			eventDates=new Array();
+			 eventGuests=new Array();
+			 eventLocation=new Array();
+			 eventDiscription=new Array();
+			 eventImage=new Array();
+			
+	
+	
+		xmlhttp=null;
+		if (window.XMLHttpRequest)
+  		{// code for IE7+, Firefox, Chrome, Opera, Safari
+  				xmlhttp=new XMLHttpRequest();
+  		}
+		else
+  		{// code for IE6, IE5
+  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+ 		 }
+		xmlhttp.onreadystatechange=function()
+  		{
+  			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    		{
+			xmlDoc=xmlhttp.responseXML;
+		
+			 eventData=xmlDoc.getElementsByTagName("EVENT");
+		
+				
+			 for(i=0; i<8 ;i++){
+				try
+       				   {
+				 xx=eventData[i].getElementsByTagName("EVNAME");
+				   xx=eventData[i].getElementsByTagName("EVNAME");
+       				 try
+       				   {
+        			  eventNames[i]=xx[0].firstChild.nodeValue;
+       				   }
+       				 catch (er)
+        			  {
+        			  eventNames[i]="-";
+        			  }
+        			
+					xx=eventData[i].getElementsByTagName("DATE");
+       				 try
+       				   {
+        			  eventDates[i]=xx[0].firstChild.nodeValue;
+       				   }
+       				 catch (er)
+        			  {
+        			  eventDates[i]="-";
+        			  }	
+						
+					xx=eventData[i].getElementsByTagName("EVGUEST");
+       				 try
+       				   {
+        			  eventGuests[i]=xx[0].firstChild.nodeValue;
+       				   }
+       				 catch (er)
+        			  {
+        			  eventGuests[i]="-";
+        			  }	
+		
+					 xx=eventData[i].getElementsByTagName("LOCATION");
+       				 try
+       				   {
+        			  eventLocation[i]=xx[0].firstChild.nodeValue;
+       				   }
+       				 catch (er)
+        			  {
+        			  eventLocation[i]="-";
+        			  }	
+					  
+					   xx=eventData[i].getElementsByTagName("DSCRPT");
+       				 try
+       				   {
+        			  eventDiscription[i]=xx[0].firstChild.nodeValue;
+       				   }
+       				 catch (er)
+        			  {
+        			  eventDiscription[i]="-";
+        			  }	
+					  
+					  
+					   xx=eventData[i].getElementsByTagName("IMAGESRC");
+       				 try
+       				   {
+        			  eventImage[i]=xx[0].firstChild.nodeValue;
+       				   }
+       				 catch (er)
+        			  {
+        			  eventImage[i]="-";
+        			  }	
+					  }
+					  catch (err)
+        			  {
+						 break;
+						  }
+				
+	
+				}
+				
+			 calculatePositions(eventNames);
+    		}
+  		}	
+	
+		
+		var parameters="fromdate=" + '1990-01-01';
+		xmlhttp.open("POST","includes/getuserevents.php",true);
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xmlhttp.send(parameters);
+	
+	
+	
+	}	
 	
 function calculatePositions(eventNames){
 		for(i=0; i<eventNames.length;i++){
@@ -305,13 +237,16 @@ function redraw(){
 					}
 				}
 			ctx.fillStyle = "rgb("+r+", "+g+", "+b+")";
-			ctx.fillText(eventNames[i],coordinatesX[i]+eltolasX,coordinatesY[i]);
-			var metrics = ctx.measureText(eventNames[i]);
+			var eventNameTemp=eventNames[i];
+			if (eventNames[i].length>15) eventNameTemp=eventNameTemp.substr(0,12)+"...";
+			ctx.fillText(eventNameTemp,coordinatesX[i]+eltolasX,coordinatesY[i]);
+			var metrics = ctx.measureText(eventNameTemp);
     	var txtwidth = metrics.width;
 		txtSize[i]=txtwidth;
+			eventDatesTemp=eventDates[i];
 			
 			ctx.font=30/coordinatesZ[i]+"px Arial";
-			ctx.fillText(eventDates[i],coordinatesX[i]+eltolasX,coordinatesY[i]+30/coordinatesZ[i]);
+			ctx.fillText(eventDatesTemp,coordinatesX[i]+eltolasX,coordinatesY[i]+30/coordinatesZ[i]);
 			
 		}
 	
@@ -378,7 +313,7 @@ function outFocus(){
 	}
 	 var eltolasXsebtemp;
 function popUp(){
-	
+	document.getElementById("signInDiv").innerHTML="";
 	if (eltolasXseb!=0){
 	
 	eltolasXsebtemp=eltolasXseb;
@@ -442,10 +377,14 @@ xmlhttp.onreadystatechange=function()
     document.getElementById("popUpBoxy").innerHTML=xmlhttp.responseText;
 	document.getElementById("meetingName").innerHTML=inFocusName;
 	document.getElementById("eventDateDisplay").innerHTML=eventDates[eventNames.indexOf(inFocusName)];
+	document.getElementById("meetingWith").innerHTML=eventGuests[eventNames.indexOf(inFocusName)];
+	document.getElementById("locationDisp").innerHTML=eventLocation[eventNames.indexOf(inFocusName)];
+	document.getElementById("descDisp").innerHTML=eventDiscription[eventNames.indexOf(inFocusName)];
+	
 	},500);
     }
   }
-xmlhttp.open("GET","textcontents/popup.txt",true);
+xmlhttp.open("GET","textcontents/popup.html",true);
 xmlhttp.send();
 }
 	
@@ -490,7 +429,7 @@ xmlhttp.onreadystatechange=function()
    
     }
   }
-xmlhttp.open("GET","textcontents/prefbox.txt",true);
+xmlhttp.open("GET","textcontents/prefbox.html",true);
 xmlhttp.send();
 	
 	}
@@ -507,66 +446,20 @@ function animvalt(){
 	
 function prefSugo(){
 	document.getElementById("menuHelp").innerHTML="";
-	document.getElementById("menuHelp").innerHTML="Beállítások";
+	document.getElementById("menuHelp").innerHTML="Preferences";
 	}
 function envSugo(){
 	document.getElementById("menuHelp").innerHTML="";
-	document.getElementById("menuHelp").innerHTML="Üzenetek";
+	document.getElementById("menuHelp").innerHTML="Messages";
 	}
 function profSugo(){
 	document.getElementById("menuHelp").innerHTML="";
-	document.getElementById("menuHelp").innerHTML="Profil";
+	document.getElementById("menuHelp").innerHTML="Profile";
+	}
+function newEventSugo(){
+	document.getElementById("menuHelp").innerHTML="";
+	document.getElementById("menuHelp").innerHTML="Add new event";
 	}
 function delSugoText(){
 	document.getElementById("menuHelp").innerHTML="";
 	}
-</script>
-
-<script>
-
-function changeBackgroundToColor(color){
-	switch(color){
-		case 0:
-		document.getElementById("evCanvas").style.background="";
-	document.getElementById("evCanvas").style.background="black";
-	break;
-	case 1:
-	document.getElementById("evCanvas").style.background="";
-	document.getElementById("evCanvas").style.background="grey";
-	break;
-	case 2:
-	document.getElementById("evCanvas").style.background="";
-	document.getElementById("evCanvas").style.background="azure";
-	break;
-	case 3:
-	document.getElementById("evCanvas").style.background="";
-	document.getElementById("evCanvas").style.background="white";
-	break;
-	case 4:
-	document.getElementById("evCanvas").style.background="";
-	document.getElementById("evCanvas").style.background="red";
-	break;
-	}
-}
-
-var dragBeginX;
-function dragEventsScroll(){
-	dragBeginX=mousePos.x;
-	dragTimer=setInterval("dragReload()",70);
-	}
-	
-function dragReload(){
-		for(i=0;i<eventNames.length;i++){
-			coordinatesX[i]-=dragBeginX-mousePos.x;
-			}
-			dragBeginX=mousePos.x;
-	}
-function dragEventsScrollend(){
-	window.clearInterval(dragTimer);
-	}
-	
-	
-</script>
-
-</body>
-</html>

@@ -1,0 +1,106 @@
+
+
+<style>
+
+#newEventDiv0{
+	
+	width:300px; 
+	height:350px;
+}
+#newEventImage{
+	position:absolute;
+	width:300px; 
+	height:350px;
+	top:0px;
+	left:0px;
+	z-index:-2;
+	
+	}
+tr.popUp{
+border: 0px;
+}
+td.popUp{
+font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #6b6b6b;
+border: 0px;
+text-align:center;
+}
+input.popUp{
+font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+
+	font-weight: bold;
+	color: #6b6b6b;
+border: 0px;
+text-align:center;
+background-color:transparent;
+}
+#eventImage{
+	 width:100px;
+	 height:100px;
+	margin-left:15px;
+	margin-top:15px;
+	}
+#meetingnametxtbox{
+	border: 0px;
+	 font-family: Arial, Helvetica, sans-serif;
+	font-size: 22px;
+	font-style: italic;
+	font-weight: bold;
+	color: #333e5f;
+	text-align: center;
+	resize:none;
+	vertical-align:middle;
+	height:50px;
+	background-color:transparent;
+	}
+#descriptiontxtbox{
+	background-color:transparent;
+	resize:none;
+	}
+</style>
+
+
+<img src="imgcontents/popUp.png" height="350px" width="300px" id="newEventImage">
+
+
+
+<div id="newEventDiv0">
+<table width="300px" height="350px" border="0">
+
+  <tr class="popUp">
+    <td class="popUp" height="130px" width="130px"><img id="eventImage" src="imgcontents/placeholder.gif"  width="100px" height="100px" ></td>
+    <td class="popUp">
+    <textarea id="meetingnametxtbox" rows="1" cols="12" placeholder="Event name"></textarea>
+    <br /> <input class="popUp" type="date" id="meetingdatebox" placeholder="2014-01-01"  />
+    </td>
+  </tr>
+  <tr class="popUp">
+    <td class="popUp" colspan="2" height="25" ><input type="text" class="popUp" id="eventGuestTextbox" placeholder="with somebody" /></td>
+    
+  </tr>
+  <tr class="popUp">
+    <td class="popUp" colspan="2" height="25" id="locationDisp"><input type="text" class="popUp" id="locationTextbox" placeholder="location" /></td>
+  
+  </tr>
+  <tr class="popUp">
+    <td class="popUp"  colspan="2" style="color: black;font-weight:normal;" id="descDisp"><textarea id="descriptiontxtbox" rows="7" cols="28" placeholder="description"></textarea></td>
+    
+  </tr>
+</tr>
+
+  <tr class="popUp">
+  	
+    <td class="popUp" style="color: black;font-weight:normal;" onclick="popUp()"> 
+    <a href="#" style="text-decoration: none; color:rgba(0,0,153,1);">Back  </a> </td>
+    <td class="popUp" style="color: black;font-weight:normal; color:rgba(0,0,153,1);" onclick="saveEvent()"> 
+    <a href="#" style="text-decoration: none;"> Save</a> </td>
+ 	
+  </tr>
+ 
+</table>
+</div>
+
